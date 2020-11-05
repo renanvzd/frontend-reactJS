@@ -11,15 +11,22 @@ function App() {
 
     useEffect(() => {
         api.get('projects').then(response => {
-            console.log(response);
+            
             setProjects(response.data);
-        });
+        })
     }, []);
 
-    function handleAddProject() {
+    async function handleAddProject() {
+        //setProjects([...projects, `Novo projeto ${Date.now()}`]);
 
-        setProjects([...projects, `Novo projeto ${Date.now()}`]);
+        const response = await api.post('projects', {
+            title: "Front-end com ReactJS",
+            owner: "Renan Veronez Drechsler"
+        });
 
+        const project = response.data;
+
+        setProjects([...projects, project]);
     }
 
     return (
@@ -30,7 +37,7 @@ function App() {
 
             <ul>
                 {projects.map(project => 
-                    <li key={project.id} >{project.title}</li>
+                    <li key={project.id}>{project.title}</li>
                 )}
             </ul>
             <button type="button" onClick={handleAddProject}>Adicionar projeto </button>
